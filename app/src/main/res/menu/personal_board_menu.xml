@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search_menu"
+        android:title="Search"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="ifRoom"
+ />
+
+
+    <item android:id="@+id/notification_menu"
+        android:title="Notification"
+
+        android:icon="@drawable/ic_alarm"
+        app:showAsAction="ifRoom"
+        />
+    <item android:title="My Cards"
+        android:id="@+id/my_card_menu"
+        />
+
+    <item android:id="@+id/help_menu"
+        android:title="Help!"/>
+
+    <item android:title="Settings"
+        android:id="@+id/settings_menu"
+        />
+</menu>

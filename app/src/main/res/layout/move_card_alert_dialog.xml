@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:text="Board:"
+        android:paddingLeft="10dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:layout_margin="10dp"
+        android:id="@+id/move_card_board_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"></Spinner>
+
+
+    <TextView
+        android:text="List:"
+        android:paddingLeft="10dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:layout_margin="10dp"
+
+        android:id="@+id/move_card_list_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+    </Spinner>
+
+
+</LinearLayout>

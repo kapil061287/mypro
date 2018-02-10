@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.depex.odepto.PersonalBoardActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:padding="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_margin="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <Button
+                
+                android:elevation="5dp"
+                android:id="@+id/name_initials_toolbar_button"
+                android:background="@drawable/name_initials_back"
+                android:layout_width="40dp"
+                android:textSize="18dp"
+                android:textColor="#ffffffff"
+                android:layout_gravity="center_vertical"
+                android:layout_height="40dp" />
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/toolbar_username_txt"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_personal_board" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
+
+</android.support.design.widget.CoordinatorLayout>

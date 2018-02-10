@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/share_card_link"
+        android:title="Share Card Link" />
+    <item
+        android:id="@+id/subscribe_menu"
+        android:title="Subscribe" />
+    <item
+        android:id="@+id/move_card_menu"
+        android:title="Move Card" />
+    <item
+        android:id="@+id/copy_card"
+        android:title="Copy Card" />
+    <item
+        android:id="@+id/archive_menu"
+        android:title="Archive" />
+    <item
+        android:id="@+id/delete_menu"
+        android:title="Delete" />
+    <item android:id="@+id/done_menu"
+        android:title="Done"
+        android:icon="@drawable/ic_check_black_24dp"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
+</menu>

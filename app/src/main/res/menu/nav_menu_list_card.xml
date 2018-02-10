@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:title="Members"
+        android:id="@+id/members_menu"
+        android:icon="@drawable/ic_person_black_24dp" >
+    </item>
+    <item android:title="Activity"
+        android:id="@+id/activity_menu"
+        android:icon="@drawable/ic_dvr_black_24dp"/>
+    <group   android:id="@+id/power_group">
+        <item android:title="Power-Ups"
+            android:id="@+id/power_ups"
+            android:icon="@drawable/ic_battery_charging_full_black_24dp" />
+    </group>
+
+    <item android:id="@+id/archive_card_menu"
+        android:title="Archived Cards"
+        android:icon="@drawable/ic_card_travel_black_24dp"/>
+
+    <item
+        android:id="@+id/archive_list_menu"
+        android:title="Archived Lists"
+        android:icon="@drawable/ic_list_black_24dp"
+         />
+<item android:id="@+id/board_setting_menu"
+    android:icon="@drawable/ic_settings_black_24dp"
+    android:title="Board Settings"
+    />
+
+<group android:id="@+id/b">
+
+    <item
+        android:id="@+id/star_board_menu"
+        android:title="Star Board"
+        android:icon="@drawable/ic_star_border_black_24dp"
+        />
+
+    <item
+        android:id="@+id/subscribe_menu"
+        android:title="Subscribe"
+        android:icon="@drawable/ic_remove_red_eye_black_24dp"
+        />
+
+    <item
+        android:id="@+id/copy_board_menu"
+        android:title="Copy Board"
+        android:icon="@drawable/ic_content_copy_black_24dp"
+        />
+
+
+    <item
+        android:id="@+id/share_board_menu"
+        android:title="Share Board Link"
+        android:icon="@drawable/ic_share_black_24dp"
+        />
+
+    <!--<item
+        android:id="@+id/sync_menu"
+        android:title="Syncing App"
+        android:icon="@drawable/ic_sync_black_24px"
+        />
+
+-->
+
+
+
+
+</group>
+
+
+</menu>

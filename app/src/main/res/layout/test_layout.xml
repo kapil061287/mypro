@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.depex.odepto.SnappingHorizontalScrollView
+    android:layout_height="match_parent"
+    app:snapItems="true"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<com.depex.odepto.ListsLinearLayout android:layout_width="270dp"
+    android:orientation="horizontal"
+    android:layout_height="match_parent"
+    >
+<include layout="@layout/list_cards_layout" />
+<include layout="@layout/list_cards_layout" />
+<include layout="@layout/list_cards_layout" />
+<include layout="@layout/list_cards_layout" />
+<include layout="@layout/list_cards_layout" />
+<include layout="@layout/list_cards_layout" />
+<include layout="@layout/list_cards_layout" />
+</com.depex.odepto.ListsLinearLayout>
+</com.depex.odepto.SnappingHorizontalScrollView>

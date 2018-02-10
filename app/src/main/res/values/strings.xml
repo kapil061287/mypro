@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Odapto</string>
+    <string name="api_key">fbb36f24d9b3985aa86fa37fd51c29eb</string>
+    <string name="api_ver">1.0</string>
+
+    <string name="clientID">1066884375701-tt2smsc2ep4rbkapj43ur0nfvhfje2n6.apps.googleusercontent.com</string>
+    <string name="title_activity_personal_board">PersonalBoardActivity</string>
+    <string name="title_activity_board_list2">BoardListActivity2</string>
+    <string name="action_settings">Settings</string>
+    <integer name="card_label_span">6</integer>
+    <string name="search_txt">Begin in your searchby typing a query into the search bar.</string>
+    <string-array name="arr">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+
+    </string-array>
+
+    <string name="label_green">green</string>
+    <string name="label_lime">lime</string>
+    <string name="label_none">none</string>
+    <string name="label_orange">orange</string>
+    <string name="label_pink">pink</string>
+    <string name="label_purple">purple</string>
+    <string name="label_red">red</string>
+    <string name="label_sky">sky</string>
+    <string name="label_yellow">yellow</string>
+    <string name="labels">Labels</string>
+    <string name="label_black">black</string>
+    <string name="label_blue">blue</string>
+    <string name="labels_tooltip">Labels</string>
+
+
+    <string name="tap_string_comment">Tap on the overflow menu of an image attachment to make it a card cover.</string>
+
+    <string name="title_activity_comment">CommentActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="card_cover_content">Card Cover</string>
+</resources>

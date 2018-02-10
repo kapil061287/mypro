@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/move_list_menu"
+        android:title="Move list"
+        />
+    <item android:id="@+id/copy_menu" android:title="Copy" />
+    <item android:id="@+id/archive_list_menu" android:title="Archive list"/>
+    <item android:id="@+id/move_all_cards" android:title="Move all cards"/>
+    <item android:id="@+id/archive_all_cards" android:title="Archive all cards"/>
+    <item android:id="@+id/subscribe" android:title="Subscribe"/>
+
+</menu>

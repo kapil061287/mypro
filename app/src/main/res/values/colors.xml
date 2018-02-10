@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#b5433e</color>
+    <color name="colorPrimaryDark">#800e17</color>
+    <color name="colorAccent">#ff9f67</color>
+    <color name="back">#e4fce6d0</color>
+    <color name="home_login_register_color">#f5a482</color>
+    <color name="colorIcon">#ffffffff</color>
+    <color name="transparent" >#00ffffff</color>
+    <color name="gray_900">#838c91</color>
+
+    <color name="label_black">#4d4d4d</color>
+    <color name="label_blue">#2e6ce9</color>
+    <color name="label_green">#00b76a</color>
+    <color name="label_lime">#31ea93</color>
+    <color name="label_none">#b3b3b3</color>
+    <color name="label_orange">#fa9531</color>
+    <color name="label_pink">#ff73cd</color>
+    <color name="label_purple">#a50ef1</color>
+    <color name="label_red">#e92e2e</color>
+    <color name="label_sky">#00c1e3</color>
+    <color name="label_yellow">#f7ef00</color>
+    <color name="black_87">#ffaaaaaa</color>
+</resources>

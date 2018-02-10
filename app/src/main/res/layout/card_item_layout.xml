@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.depex.odepto.OdaptoCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_odpato"
+    app:cardBackgroundColor="#ffffffff"
+    app:cardCornerRadius="10dp"
+    app:cardPreventCornerOverlap="false"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingBottom="@dimen/grid_1"
+    android:layout_height="wrap_content">
+    <com.depex.odepto.view.FixedSizeImageView
+        android:layout_width="match_parent"
+        android:background="#FFAAAAAA"
+        android:visibility="gone"
+        android:id="@+id/card_cover"
+        android:longClickable="false"
+        android:contentDescription="@string/card_cover_content"
+        android:layout_height="200dp" />
+
+    <com.depex.odepto.view.LabelsView
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/labels_view_odpatocard"
+        android:layout_marginLeft="@dimen/grid_1"
+        android:layout_marginTop="@dimen/grid_1"
+        android:layout_marginRight="@dimen/grid_1"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="@dimen/card_item_text_size"
+        android:layout_width="wrap_content"
+        android:id="@+id/card_text"
+        android:layout_marginLeft="@dimen/grid_1"
+        android:layout_marginTop="@dimen/grid_1"
+        android:layout_marginRight="@dimen/grid_1"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+</com.depex.odepto.OdaptoCardView>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<declare-styleable name="snappingItem">
+    <attr name="snapItems" format="boolean" />
+</declare-styleable>
+    
+<declare-styleable name="OListView">
+    <attr name="scrollRegion" format="integer" />
+</declare-styleable>
+    <declare-styleable name="OEditText">
+        <attr name="singleLineWrapText"  format="boolean" />
+        <attr name="isRegularTextViewWhenNotEditing" format="boolean" />
+    </declare-styleable>
+</resources>

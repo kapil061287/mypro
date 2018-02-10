@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="collepse_actionbar" parent="Widget.Design.CollapsingToolbar">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:titleTextColor">#ff000000</item>
+    </style>
+</resources>
