@@ -17,4 +17,7 @@
     <dimen name="grid_1">10dp</dimen>
     <dimen name="card_item_text_size">18dp</dimen>
     <dimen name="corner_radius_tiny">10dp</dimen>
+    <dimen name="attachment_from_margin">20dp</dimen>
+    <dimen name="margin_left_input">20dp</dimen>
+    <dimen name="margin_right_input">20dp</dimen>
 </resources>

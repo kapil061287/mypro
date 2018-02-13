@@ -1,11 +1,15 @@
 package com.depex.odepto;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,23 +24,53 @@ import android.view.View;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.depex.odepto.activity.BaseGoogleDriveActivity;
+import com.depex.odepto.adpater.AttachFromAdapter;
+import com.depex.odepto.adpater.AttachmentListModel;
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AccessTokenPair;
+import com.dropbox.client2.session.AppKeyPair;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveClient;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.drive.Metadata;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import okio.Okio;
 import okio.Sink;
 
 
-public class CommentActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, OnVolleySuccessListener {
+public class CommentActivity extends BaseGoogleDriveActivity implements View.OnClickListener, View.OnFocusChangeListener, OnVolleySuccessListener {
+    private static final int REQUEST_CODE_SIGN_IN = 1;
+    private static final String TAG = "commentActivityTag";
     FloatingActionMenu fab_menu;
     TextView textView, show_details_txt, attachmentTextView;
     TextInputLayout commentBox;
@@ -44,14 +78,33 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     String userid;
     String userToken;
     String fullname;
+    private boolean mLoggedIn;
     Menu optionMenu;
     RecyclerView labelCommentRecyclerview;
     RecyclerView commentRecyclerView;
     Toolbar toolbar;
     BoardCard boardCard;
     RecyclerView attachmentRecyclerView;
+
+    private final String ACCOUNT_PREFS_NAME="prefs";
+
+    DriveClient mDriveClient;
+    GoogleSignInClient mGoogleSignInClient;
+    DriveResourceClient mDriveResourceClient;
+    Bitmap bitmapToSave;
+
+    DropboxAPI<AndroidAuthSession> mApi;
     ImageView coverCardImage;
     FloatingActionButton fab_menu_attachment, fab_menu_members, fab_menu_due_date, fab_menu_checklist, fab_menu_labels;
+
+    public boolean ismLoggedIn() {
+        return mLoggedIn;
+    }
+
+    public void setmLoggedIn(boolean mLoggedIn) {
+        this.mLoggedIn = mLoggedIn;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +120,12 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         labelCommentRecyclerview =findViewById(R.id.label_recyclerview);
         coverCardImage=findViewById(R.id.card_cover_img);
         attachmentTextView=findViewById(R.id.attachment_text_view);
+
+
+        AndroidAuthSession session=buildSession();
+        mApi=new DropboxAPI<>(session);
+
+
 
         commentBox=findViewById(R.id.comment_text_layout);
         commentBox.getEditText().setOnFocusChangeListener(this);
@@ -87,11 +146,10 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         commentRecyclerView=findViewById(R.id.comment_recycler_view);
         attachmentRecyclerView=findViewById(R.id.attach_img_resources_recyclerview);
 
-
-
         /*
         Get Card info from previous activity...
          */
+
         Intent prevIntent=getIntent();
         Bundle bundle=prevIntent.getExtras();
         if(bundle!=null) {
@@ -112,15 +170,31 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showComment() {
-
         try {
             JSONObject commentsJson=createJsonForGetComment();
             Utility.getJsonFromHttp(this, commentsJson, this, Utility.apiUrl);
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
+
+    //Drop Box logout
+    private void logout(){
+        mApi.getSession().unlink();
+        clearKeys();
+        setmLoggedIn(false);
+    }
+
+
+
+    //drop box preferences clear method fro logout
+    private void clearKeys() {
+        SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.clear();
+        edit.commit();
+    }
+
 
     private JSONObject createJsonForGetComment() throws JSONException {
         JSONObject requestData=new JSONObject();
@@ -209,6 +283,58 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fab_menu_attachment:
+
+                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                AttachmentListModel takePhoto=new AttachmentListModel();
+                takePhoto.setAttachMentTypeName("Take Photo");
+                takePhoto.setImage_res(R.drawable.ic_camera_black_24dp);
+
+                AttachmentListModel otherFile=new AttachmentListModel();
+                otherFile.setImage_res(R.drawable.ic_attachment_comment_draw);
+                otherFile.setAttachMentTypeName("Other File");
+
+                AttachmentListModel googleDrive=new AttachmentListModel();
+                googleDrive.setAttachMentTypeName("Google Drive");
+                googleDrive.setImage_res(R.drawable.ic_google_drive_logo);
+
+                AttachmentListModel dropBoxModal=new AttachmentListModel();
+                dropBoxModal.setAttachMentTypeName("Drop Box");
+                dropBoxModal.setImage_res(R.drawable.ic_dropbox);
+
+
+                List<AttachmentListModel> listModels=new ArrayList<>();
+                listModels.add(takePhoto);
+                listModels.add(otherFile);
+                listModels.add(googleDrive);
+
+                AttachFromAdapter attachFromAdapter=new AttachFromAdapter(listModels, this);
+
+                builder.setAdapter(attachFromAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        AttachmentListModel model=listModels.get(i);
+                        String name=model.getAttachMentTypeName();
+                        Toast.makeText(CommentActivity.this, name, Toast.LENGTH_LONG).show();
+
+                        switch (i){
+                            case 0:
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                signIn();
+                                break;
+                            case 3:
+                                dropBox();
+                                break;
+                        }
+                    }
+                });
+                builder.setTitle("Attach From ...");
+                builder.create().show();
+
+                //builder.setAdapter()
+
                 fab_menu.close(false);
                 break;
             case R.id.fab_menu_labels:
@@ -228,7 +354,55 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 getMenuInflater().inflate(R.menu.comment_activities_menu, popupMenu.getMenu());
                 popupMenu.show();
                 break;
+        }
+    }
 
+
+    private static final boolean USE_OAUTH1 = false;
+
+    //drop box initialiation method
+    private void dropBox() {
+
+            if(mLoggedIn){
+                logout();
+            }else {
+
+                    mApi.getSession().startOAuth2Authentication(this);
+
+            }
+
+
+
+    }
+
+
+    //drop box build session method
+    private AndroidAuthSession buildSession(){
+        AppKeyPair appKeyPair=new AppKeyPair(getString(R.string.drop_box_app_key), getString(R.string.drop_box_app_secret));
+        AndroidAuthSession session=new AndroidAuthSession(appKeyPair);
+        loadAuth(session);
+        return session;
+    }
+
+    private static final String ACCESS_KEY_NAME = "ACCESS_KEY";
+    private static final String ACCESS_SECRET_NAME = "ACCESS_SECRET";
+
+
+    //Drop box api load auth method
+    private void loadAuth(AndroidAuthSession session) {
+        SharedPreferences preferences=getSharedPreferences(ACCOUNT_PREFS_NAME, MODE_PRIVATE);
+        String key=preferences.getString(ACCESS_KEY_NAME, null);
+        String secret=preferences.getString(ACCESS_SECRET_NAME, null);
+        if(key==null || secret==null || key.length()==0 || secret.length()==0){
+            return;
+        }
+
+        if (key.equals("oauth2:")) {
+            // If the key is set to "oauth2:", then we can assume the token is for OAuth 2.
+            session.setOAuth2AccessToken(secret);
+        } else {
+            // Still support using old OAuth 1 tokens.
+            session.setAccessTokenPair(new AccessTokenPair(key, secret));
         }
     }
 
@@ -262,7 +436,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onSuccess(String s, Object... views) {
-
         Log.i("onSuccessComment", s);
         try {
             JSONObject response = new JSONObject(s);
@@ -276,7 +449,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                             createCardColorlabel(jsonArray,labelCommentRecyclerview);
                         break;
                     case "all_card_comment":
-
                         JSONArray attachments=responseData.getJSONArray("attachments");
                         if(attachments!=null){
                             createAttachmentRecycler(attachments, attachmentRecyclerView);
@@ -285,7 +457,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                         createCommentRecycler(jsonArray1, commentRecyclerView);
                         break;
                     case "card_comments":
-
 
                         break;
                 }
@@ -341,6 +512,8 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setLayoutManager(manager);
     }
 
+
+    //Volley API
     void createCommentRecycler(JSONArray jsonArray, RecyclerView view){
             Log.i("commentRecycler", jsonArray.toString());
             ArrayList<Comment> commentList=new ArrayList<>();
@@ -374,4 +547,57 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     public void onError(VolleyError error) {
         Log.e("onSuccessListenter", error.toString());
     }
+
+
+    //Google Drive method
+
+    public void pinFile(DriveFile driveFile){
+        Task<Metadata> pinFileTask=getDriveResourceClient().getMetadata(driveFile).continueWithTask(new Continuation<Metadata, Task<Metadata>>() {
+            @Override
+            public Task<Metadata> then(@NonNull Task<Metadata> task) throws Exception {
+                Metadata metadata=task.getResult();
+                if(!metadata.isPinnable()){
+                    showMessage("Meta data is pinnable");
+                    return Tasks.forResult(metadata);
+                }
+                if(metadata.isPinned()){
+                    showMessage("Task is pinned already");
+                    return Tasks.forResult(metadata);
+                }
+
+                MetadataChangeSet changeSet=new MetadataChangeSet.Builder().setPinned(true).build();
+                return getDriveResourceClient().updateMetadata(driveFile, changeSet);
+
+            }
+        });
+
+        pinFileTask.addOnSuccessListener(new OnSuccessListener<Metadata>() {
+            @Override
+            public void onSuccess(Metadata metadata) {
+                showMessage("Meta data updated !");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Unable to update metadata", e);
+                showMessage("Update meta data failed");
+                finish();
+            }
+        });
+
+    }
+
+
+    //Google Drive method
+    @Override
+    protected void onDriveClientReady() {
+            pickImageFile().addOnSuccessListener(this, new OnSuccessListener<DriveId>() {
+                @Override
+                public void onSuccess(DriveId driveId) {
+                    pinFile(driveId.asDriveFile());
+                }
+            });
+
+    }
+
 }

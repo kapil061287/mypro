@@ -24,6 +24,7 @@ public class OdaptoCardView extends OCardView{
     private LabelsView labelsView;
     private TextView cardNameTextView;
     private Adapter parentBaseAdapter;
+    private boolean isCardCover;
 
 
     public void setParentBaseAdapter(Adapter parentBaseAdapter) {
@@ -52,10 +53,26 @@ public class OdaptoCardView extends OCardView{
         cardCoverImage=cardContainer.findViewById(R.id.card_cover);
         labelsView=cardContainer.findViewById(R.id.labels_view_odpatocard);
         cardNameTextView=cardContainer.findViewById(R.id.card_text);
+        update();
+    }
+
+    private void update() {
+        if(card==null) return;
+
+        processCardCover();
+        processLabelsView();
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     public static View renderForAdapter(Context context, final int position, View convertView, ViewGroup parent, Card card, final Adapter adapter){
-                View view=null;
+                View view;
                 if(convertView==null){
                     view= LayoutInflater.from(context).inflate(R.layout.card_item_layout, parent, false);
 
@@ -64,6 +81,7 @@ public class OdaptoCardView extends OCardView{
                 }
 
                 final OdaptoCardView odaptoCardView=view.findViewById(R.id.card_odpato);
+                odaptoCardView.setCard(card);
                 if(parent instanceof ListView){
                     final ListView listView= (ListView) parent;
                     final AdapterView.OnItemClickListener onClickListener=listView.getOnItemClickListener();
@@ -95,5 +113,21 @@ public class OdaptoCardView extends OCardView{
             return view;
     }
 
+    public void processCardCover(){
+        if(card.hasCardCover()){
+            GlideApp.with(this).load(card.getCoverImage()).fitCenter().into(cardCoverImage);
+            cardCoverImage.setVisibility(View.VISIBLE);
+        }else {
+            cardCoverImage.setVisibility(View.GONE);
+        }
+    }
 
+    public void processLabelsView(){
+        if(card.hasLabels()){
+            labelsView.setLabels(card.getLabels());
+            labelsView.setVisibility(View.VISIBLE);
+        }else {
+            labelsView.setVisibility(GONE);
+        }
+    }
 }

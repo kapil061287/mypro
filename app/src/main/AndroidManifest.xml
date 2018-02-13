@@ -3,6 +3,7 @@
     package="com.depex.odepto">
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -55,9 +56,22 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".BoardListActivity2"></activity>
 
-        <activity android:name=".TestLayout">
+        <activity android:name=".TestLayout"/>
+
+            <activity
+                android:name="com.dropbox.client2.android.AuthActivity"
+                android:launchMode="singleTask"
+                android:configChanges="orientation|keyboard">
+                <intent-filter>
+                    <!-- Change this to be db- followed by your app key -->
+                    <data android:scheme="db-sauids7y2n12nue" />
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.BROWSABLE"/>
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+            </activity>
 
 
-        </activity>
+
     </application>
 </manifest>

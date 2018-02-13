@@ -32,10 +32,15 @@
     <string name="label_blue">blue</string>
     <string name="labels_tooltip">Labels</string>
 
+    <string name="drop_box_app_key">sauids7y2n12nue</string>
+    <string name="drop_box_app_secret">a7tpevka8ue3vey</string>
+
 
     <string name="tap_string_comment">Tap on the overflow menu of an image attachment to make it a card cover.</string>
 
     <string name="title_activity_comment">CommentActivity</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="card_cover_content">Card Cover</string>
+    <string name="select_file">Select File</string>
+    <string name="select_folder">Select Folder</string>
 </resources>

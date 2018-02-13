@@ -18,14 +18,14 @@ public class Card {
     String coverImage;
     String totalAttachments;
 
-    List<Label> list;
+    List<Label> labels;
 
-    public List<Label> getList() {
-        return list;
+    public List<Label> getLabels() {
+        return labels;
     }
 
-    public void setList(List<Label> list) {
-        this.list = list;
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 
     public String getCoverImage() {
@@ -107,12 +107,18 @@ public class Card {
         return result;
     }
 
-    public boolean hasCardCover(Card card){
-        if(card.getCoverImage()==null || card.getCoverImage().equals("")) {
+    public boolean hasCardCover(){
+        if(this.getCoverImage()==null || this.getCoverImage().equals("")) {
             return false;
         }
         return true;
     }
 
-
+    public boolean hasLabels(){
+        if(labels.size()>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

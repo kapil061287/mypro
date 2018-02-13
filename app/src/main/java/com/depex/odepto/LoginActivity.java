@@ -1,6 +1,8 @@
 package com.depex.odepto;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     FirebaseAuth auth;
     GoogleSignInClient googleSignInClient;
+    ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password_txt=findViewById(R.id.password_txt);
         login_btn=findViewById(R.id.login_btn);
         login_btn.setOnClickListener(this);
+        layout=findViewById(R.id.parent_login_constraint_layout);
         google_sign_in=findViewById(R.id.google_sign_btn);
         google_sign_in.setOnClickListener(this);
 
@@ -143,6 +147,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if(code.equals("109")){
                             Intent intent=new Intent(LoginActivity.this, VerifyActivity.class);
                             startActivity(intent);
+                        }else if(code.equals("108")){
+                            String msg=responseData.getString("ErrorMsg");
+                            Snackbar.make(layout, msg, Snackbar.LENGTH_INDEFINITE).setAction("OK", null).show();
                         }
                     }
 
@@ -213,7 +220,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     .putString("fullname",   fullname)
                                     .putBoolean("login", true)
                                     .putString("userToken", token)
-                                    .putString("userid", userid).commit();
+                                    .putString("userid", userid).apply();
                             Intent intent=new Intent(LoginActivity.this, PersonalBoardActivity.class);
                             startActivity(intent);
 

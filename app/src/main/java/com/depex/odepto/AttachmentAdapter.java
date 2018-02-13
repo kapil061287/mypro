@@ -33,6 +33,12 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.At
         Attachment attachment= attachmentList.get(position);
         String url=attachment.getAttachmentUrl();
         GlideApp.with(activity).load(url).into(holder.attachmentImage);
+        holder.attachmentImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

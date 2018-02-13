@@ -17,7 +17,7 @@
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             android:id="@+id/collapsing_toolbar"
-            android:theme="@style/collepse_actionbar"
+
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
             android:fitsSystemWindows="true"
@@ -35,8 +35,6 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             app:title="Comments"
-             app:subtitleTextColor="#ff000000"
-            app:titleTextColor="#ff000000"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"

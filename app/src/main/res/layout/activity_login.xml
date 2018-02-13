@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parent_login_constraint_layout"
     android:background="@color/back"
     tools:context="com.depex.odepto.LoginActivity">
 
@@ -75,14 +76,14 @@
         android:id="@+id/button"
         android:layout_width="66dp"
         android:layout_height="37dp"
-        android:textColor="#ff000000"
-        android:layout_marginStart="192dp"
-        android:layout_marginLeft="192dp"
+        android:layout_marginStart="168dp"
+        android:layout_marginLeft="168dp"
         android:layout_marginTop="192dp"
         android:background="#00ffffff"
         android:text="Cancel"
-        android:textStyle="bold"
+        android:textColor="#ff000000"
         android:textSize="12dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

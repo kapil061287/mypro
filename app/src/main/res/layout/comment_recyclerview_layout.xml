@@ -7,7 +7,6 @@
     <Button
         android:layout_gravity="center_vertical"
         android:textColor="#fff"
-
         android:layout_marginRight="10dp"
         android:background="@drawable/name_initials_back"
         android:clickable="false"
@@ -23,13 +22,12 @@
     android:id="@+id/user_id"
     android:layout_width="wrap_content"
     android:textColor="#ff000000"
-    android:textStyle="bold"
-    android:textSize="18dp"
+    android:textSize="16dp"
     android:layout_height="wrap_content" />
-<EditText
+<TextView
     android:padding="5dp"
-    android:background="@drawable/comment_recycler_edit_box_back"
     android:id="@+id/comment_edit_text"
+    android:textSize="14dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 </LinearLayout>

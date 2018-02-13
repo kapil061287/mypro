@@ -1,9 +1,12 @@
-package com.depex.odepto;
+package com.depex.odepto.adpater;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import com.depex.odepto.OdaptoCardView;
+import com.depex.odepto.recent.Card;
 
 import java.util.List;
 
@@ -12,9 +15,11 @@ import java.util.List;
 public class CardListAdapter extends BaseAdapter {
 
 
-    List<BoardCard> cards;
-    public CardListAdapter(Context context, List<BoardCard> cards){
+    List<Card> cards;
+    Context context;
+    public CardListAdapter(Context context, List<Card> cards){
         this.cards=cards;
+        this.context=context;
     }
 
 
@@ -22,8 +27,6 @@ public class CardListAdapter extends BaseAdapter {
     public int getCount() {
         return cards.size();
     }
-
-
 
     @Override
     public Object getItem(int i) {
@@ -37,6 +40,6 @@ public class CardListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+        return OdaptoCardView.renderForAdapter(context, i, view, viewGroup, cards.get(i), this);
     }
 }

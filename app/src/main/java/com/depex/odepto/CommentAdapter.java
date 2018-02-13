@@ -48,7 +48,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     public class CommentViewholder extends RecyclerView.ViewHolder{
-        EditText comment_edit_text;
+        TextView comment_edit_text;
         Button name_initials;
         TextView user_name;
         public CommentViewholder(View itemView) {

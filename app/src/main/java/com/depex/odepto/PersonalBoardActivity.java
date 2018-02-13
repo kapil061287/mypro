@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -41,6 +42,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveClient;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveResourceClient;
 
 
 import org.json.JSONArray;
@@ -55,6 +63,7 @@ import java.util.List;
 public class PersonalBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
 
+
     SharedPreferences preferences;
     SwipeRefreshLayout refreshLayout;
     RecyclerView board_list;
@@ -66,6 +75,8 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
     List<Board> list;
     BoardAdapter boardAdapter;
     String fullname, userToken, userid;
+
+
 
     View alert_view;
 
@@ -81,6 +92,12 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
         setContentView(R.layout.nav_personal_board_activity);
         board_list=findViewById(R.id.board_list);
         preferences =getSharedPreferences("odepto_pref", MODE_PRIVATE);
+
+
+
+
+
+
         //Room.inMemoryDatabaseBuilder(this, )
         fullname=preferences.getString("fullname", "0");
         userToken=preferences.getString("userToken", "0");
@@ -257,6 +274,15 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
                 try {
 
                     if(!response.getBoolean("successBool")){
+                        JSONObject errorObj=response.getJSONObject("ErrorObj");
+                        String errorCode=errorObj.getString("ErrorCode");
+                        String errorMsg=errorObj.getString("ErrorMsg");
+                        if("105".equalsIgnoreCase(errorCode)){
+                            Toast.makeText(PersonalBoardActivity.this, errorMsg , Toast.LENGTH_LONG ).show();
+                            preferences.edit().clear().apply();
+                            Intent intent=new Intent(PersonalBoardActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
                         return;
                     }
                     JSONObject requestData=response.getJSONObject("response");
@@ -451,4 +477,6 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
         }
         return true;
     }
+
+
 }
