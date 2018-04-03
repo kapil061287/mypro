@@ -1,32 +1,68 @@
 package com.depex.odepto.recent;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.Room;
+import android.support.annotation.NonNull;
+
 import com.depex.odepto.BoardCard;
+import com.depex.odepto.BoardList;
 import com.depex.odepto.Label;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by we on 2/8/2018.
- */
-
+@Entity(tableName = "card")
+/*
+,
+        foreignKeys = @ForeignKey(entity = BoardList.class, parentColumns ="list_id",
+                childColumns = "list_id", onDelete = ForeignKey.CASCADE))
+*/
 public class Card {
 
+    @ColumnInfo(name = "list_id")
+    @SerializedName("list_id")
+    String list_id;
+
+    @ColumnInfo(name="card_title")
+    @SerializedName("card_title")
     String title;
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "card_id")
+    @SerializedName("card_id")
     String cardId;
+    @ColumnInfo(name = "cardComments")
+    @SerializedName("cardComments")
     String cardComments;
+    @ColumnInfo(name = "del_status")
+    @SerializedName("del_status")
     String delStatus;
+    @ColumnInfo(name = "cover_image")
+    @SerializedName("cover_image")
     String coverImage;
+    @ColumnInfo(name = "total_attachment")
+    @SerializedName("total_attachment")
     String totalAttachments;
 
-    List<Label> labels;
 
-    public List<Label> getLabels() {
-        return labels;
+
+
+
+
+    public String getList_id() {
+        return list_id;
     }
 
-    public void setLabels(List<Label> labels) {
-        this.labels = labels;
+    public void setList_id(String list_id) {
+        this.list_id = list_id;
     }
+
+
 
     public String getCoverImage() {
         return coverImage;
@@ -76,34 +112,33 @@ public class Card {
         this.title = title;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        BoardCard card = (BoardCard) o;
-
-        if (getTitle() != null ? !getTitle().equals(card.getTitle()) : card.getTitle() != null)
+        Card card = (Card) o;
+        if (list_id != null ? !list_id.equals(card.list_id) : card.list_id != null) return false;
+        if (title != null ? !title.equals(card.title) : card.title != null) return false;
+        if (!cardId.equals(card.cardId)) return false;
+        if (cardComments != null ? !cardComments.equals(card.cardComments) : card.cardComments != null)
             return false;
-        if (getCardId() != null ? !getCardId().equals(card.getCardId()) : card.getCardId() != null)
+        if (delStatus != null ? !delStatus.equals(card.delStatus) : card.delStatus != null)
             return false;
-        if (getCardComments() != null ? !getCardComments().equals(card.getCardComments()) : card.getCardComments() != null)
+        if (coverImage != null ? !coverImage.equals(card.coverImage) : card.coverImage != null)
             return false;
-        if (getDelStatus() != null ? !getDelStatus().equals(card.getDelStatus()) : card.getDelStatus() != null)
-            return false;
-        if (getCoverImage() != null ? !getCoverImage().equals(card.getCoverImage()) : card.getCoverImage() != null)
-            return false;
-        return getTotalAttachments() != null ? getTotalAttachments().equals(card.getTotalAttachments()) : card.getTotalAttachments() == null;
+        return totalAttachments != null ? totalAttachments.equals(card.totalAttachments) : card.totalAttachments == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getTitle() != null ? getTitle().hashCode() : 0;
-        result = 31 * result + (getCardId() != null ? getCardId().hashCode() : 0);
-        result = 31 * result + (getCardComments() != null ? getCardComments().hashCode() : 0);
-        result = 31 * result + (getDelStatus() != null ? getDelStatus().hashCode() : 0);
-        result = 31 * result + (getCoverImage() != null ? getCoverImage().hashCode() : 0);
-        result = 31 * result + (getTotalAttachments() != null ? getTotalAttachments().hashCode() : 0);
+        int result = list_id != null ? list_id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + cardId.hashCode();
+        result = 31 * result + (cardComments != null ? cardComments.hashCode() : 0);
+        result = 31 * result + (delStatus != null ? delStatus.hashCode() : 0);
+        result = 31 * result + (coverImage != null ? coverImage.hashCode() : 0);
+        result = 31 * result + (totalAttachments != null ? totalAttachments.hashCode() : 0);
         return result;
     }
 
@@ -114,11 +149,17 @@ public class Card {
         return true;
     }
 
-    public boolean hasLabels(){
-        if(labels.size()>0){
-            return true;
-        }else {
-            return false;
-        }
+
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "title='" + title + '\'' +
+                ", cardId='" + cardId + '\'' +
+                ", cardComments='" + cardComments + '\'' +
+                ", delStatus='" + delStatus + '\'' +
+                ", coverImage='" + coverImage + '\'' +
+                ", totalAttachments='" + totalAttachments + '\'' +
+                '}';
     }
 }

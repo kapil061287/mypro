@@ -32,6 +32,5 @@ private  boolean scrollSilently;
 
     public void setScrollSilently(boolean scrollSilently) {
         this.scrollSilently = scrollSilently;
-
     }
 }

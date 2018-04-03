@@ -43,4 +43,10 @@
     <string name="card_cover_content">Card Cover</string>
     <string name="select_file">Select File</string>
     <string name="select_folder">Select Folder</string>
+    <string name="title_activity_board_list">BoardListActivity</string>
+    <string name="add_a_card">Add a card....</string>
+    <string name="members">Members</string>
+    <string name="activity">Activities</string>
+    <string name="title_activity_comment2">CommentActivity2</string>
+    <string name="title_activity_google_drive">GoogleDriveActivity</string>
 </resources>

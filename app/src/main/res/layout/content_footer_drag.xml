@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:orientation="vertical"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:text="@string/add_a_card"
+        android:textAllCaps="false"
+        android:textColor="#ffffffff"
+        android:id="@+id/card_create_btn"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:gravity="left|center_vertical"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/add_card_button_back"
+        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</FrameLayout>

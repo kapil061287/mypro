@@ -1,15 +1,42 @@
 package com.depex.odepto;
 
-/**
- * Created by we on 12/14/2017.
- */
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import com.depex.odepto.recent.Card;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class BoardList {
-
+    @ColumnInfo(name = "list_title")
+    @SerializedName("list_title")
     private  String title;
+    @PrimaryKey
+    @NonNull
+    @SerializedName("list_id")
     private  String id;
 
+    @ColumnInfo(name = "board_id")
+    @SerializedName("board_id")
     private String boardId;
+
+    @SerializedName("cards")
+    private List<Card> cards=new ArrayList<>();
+
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
 
     public String getBoardId() {
         return boardId;
@@ -42,21 +69,29 @@ public class BoardList {
 
         BoardList boardList = (BoardList) o;
 
-        if (getTitle() != null ? !getTitle().equals(boardList.getTitle()) : boardList.getTitle() != null)
+        if (title != null ? !title.equals(boardList.title) : boardList.title != null) return false;
+        if (!id.equals(boardList.id)) return false;
+        if (boardId != null ? !boardId.equals(boardList.boardId) : boardList.boardId != null)
             return false;
-        if (getId() != null ? !getId().equals(boardList.getId()) : boardList.getId() != null)
-            return false;
-        return getBoardId() != null ? getBoardId().equals(boardList.getBoardId()) : boardList.getBoardId() == null;
+        return cards != null ? cards.equals(boardList.cards) : boardList.cards == null;
     }
 
     @Override
     public int hashCode() {
-        int result=getTitle().length()+getId().length()+getBoardId().length();
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + id.hashCode();
+        result = 31 * result + (boardId != null ? boardId.hashCode() : 0);
+        result = 31 * result + (cards != null ? cards.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return getTitle()+" and "+getId();
+        return "BoardList{" +
+                "title='" + title + '\'' +
+                ", id='" + id + '\'' +
+                ", boardId='" + boardId + '\'' +
+                ", cards=" + cards +
+                '}';
     }
 }

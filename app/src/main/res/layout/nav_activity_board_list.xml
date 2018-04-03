@@ -9,7 +9,7 @@
     android:layout_height="match_parent">
 
     <include android:layout_width="wrap_content"
-        layout="@layout/activity_board_list"
+        layout="@layout/activity_board_list3"
         android:layout_height="match_parent"/>
 
     <android.support.design.widget.NavigationView

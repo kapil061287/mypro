@@ -1,40 +1,34 @@
 package com.depex.odepto;
-
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-
-@Entity(tableName = "board")
+import com.google.gson.annotations.SerializedName;
 public class Board {
-        @ColumnInfo(name = "image_url")
+        @SerializedName("bg_img")
         private String imageUrl;
 
-        @ColumnInfo(name = "board_url")
+        @SerializedName("board_url")
         private String boardUrl;
 
-        @ColumnInfo(name = "board_key")
+        @SerializedName("board_key")
         private String boardKey;
 
-        @ColumnInfo(name = "team_id")
+        @SerializedName( "team_id")
         private String teamId;
 
-        @ColumnInfo(name = "board_visibility")
+        @SerializedName("board_visibility")
         private String boardVisibility;
 
-        @ColumnInfo(name = "board_type1")
+        @SerializedName("BoardType")
         private String boardType1;
 
-        @ColumnInfo(name = "board_title")
+        @SerializedName("board_title")
         private String boardTitle;
 
-        @ColumnInfo(name = "board_id")
-        @PrimaryKey
+       @SerializedName("board_id")
         private String boardId;
 
-        @ColumnInfo(name = "board_star")
+        @SerializedName("board_star")
         private String boardStar;
 
-        @ColumnInfo(name = "board_type2")
+        @SerializedName("board_type2")
         private String boardType2;
 
         public String getImageUrl() {

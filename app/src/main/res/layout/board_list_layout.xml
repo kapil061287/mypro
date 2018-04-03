@@ -21,7 +21,7 @@
         <ImageView
             android:id="@+id/personal_board_img"
             android:layout_width="50dp"
-            android:background="@color/colorAccent"
+
             android:layout_height="50dp" />
         <TextView
             android:layout_width="0dp"

@@ -60,7 +60,7 @@ public class OdaptoCardView extends OCardView{
         if(card==null) return;
 
         processCardCover();
-        processLabelsView();
+
     }
 
     public Card getCard() {
@@ -122,12 +122,5 @@ public class OdaptoCardView extends OCardView{
         }
     }
 
-    public void processLabelsView(){
-        if(card.hasLabels()){
-            labelsView.setLabels(card.getLabels());
-            labelsView.setVisibility(View.VISIBLE);
-        }else {
-            labelsView.setVisibility(GONE);
-        }
-    }
+
 }

@@ -108,7 +108,6 @@ public class OListView extends ListView {
         }
     }
 
-
     private int pointToPositionWithHalves(float y) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -121,7 +120,6 @@ public class OListView extends ListView {
         }
         return getLastVisiblePosition() + 1;
     }
-
 
 
     private void updateRow(View view, int position, boolean b) {

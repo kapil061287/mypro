@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(b){
             Intent intent=new Intent(this, PersonalBoardActivity.class);
             startActivity(intent);
+            finish();
         }
 
     }
@@ -141,12 +142,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.commit();
                         Intent intent=new Intent(LoginActivity.this, PersonalBoardActivity.class );
                         startActivity(intent);
+                        finish();
                     }else{
                         responseData=response.getJSONObject("ErrorObj");
                         String code=responseData.getString("ErrorCode");
                         if(code.equals("109")){
                             Intent intent=new Intent(LoginActivity.this, VerifyActivity.class);
                             startActivity(intent);
+                            finish();
                         }else if(code.equals("108")){
                             String msg=responseData.getString("ErrorMsg");
                             Snackbar.make(layout, msg, Snackbar.LENGTH_INDEFINITE).setAction("OK", null).show();
@@ -181,12 +184,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
-
-    /**
-     * Sign in with Linked in process
-     */
     private void sendHttpRequestForSocial(String email, final String fullname){
         JSONObject requestData=new JSONObject();
         JSONObject data=new JSONObject();
@@ -223,7 +220,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     .putString("userid", userid).apply();
                             Intent intent=new Intent(LoginActivity.this, PersonalBoardActivity.class);
                             startActivity(intent);
-
                             finish();
                         }else{
                             JSONObject object=response.getJSONObject("ErrorObj");
@@ -258,14 +254,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 GoogleSignInAccount account=task.getResult(ApiException.class);
 
-                String email=account.getEmail();
-                String username=account.getDisplayName();
-
-
-
                 firebaseAuthWithGoogle(account);
             }catch (Exception e){
-                e.printStackTrace();
+                Log.e("responseDataError", "Login Activity : "+e.toString());
             }
         }
 
@@ -275,9 +266,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             String name=account.getDisplayName();
             String email=account.getEmail();
-            Toast.makeText(this, name+"   "+email, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, name+"   "+email, Toast.LENGTH_LONG).show();
             sendHttpRequestForSocial(email, name);
-
     }
 
 
@@ -292,6 +282,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void signin() {
         Intent intent=googleSignInClient.getSignInIntent();
         startActivityForResult(intent, 1);
+
     }
 
 

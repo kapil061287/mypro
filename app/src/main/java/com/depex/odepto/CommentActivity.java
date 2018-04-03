@@ -1,14 +1,22 @@
 package com.depex.odepto;
 
+import android.*;
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -22,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +39,10 @@ import com.android.volley.VolleyError;
 import com.depex.odepto.activity.BaseGoogleDriveActivity;
 import com.depex.odepto.adpater.AttachFromAdapter;
 import com.depex.odepto.adpater.AttachmentListModel;
+import com.depex.odepto.api.ProjectApi;
+import com.depex.odepto.recent.Card;
+import com.depex.odepto.screen.GoogleDriveActivity;
+import com.depex.odepto.services.DownloadRandomPicture;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AccessTokenPair;
@@ -53,24 +66,48 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.gson.Gson;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+import com.nbsp.materialfilepicker.utils.FileUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Okio;
 import okio.Sink;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class CommentActivity extends BaseGoogleDriveActivity implements View.OnClickListener, View.OnFocusChangeListener, OnVolleySuccessListener {
-    private static final int REQUEST_CODE_SIGN_IN = 1;
+public class CommentActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, OnVolleySuccessListener {
     private static final String TAG = "commentActivityTag";
+    private static final int DROP_BOX_REQUEST_CODE=1;
+    private static final int GOOGLE_DRIVE_REQUEST_CODE=2;
+    private static final int CAMERA_REQUEST_CODE=3;
+    private static final int ATTACH_FILE_REQUEST_CODE=4;
     FloatingActionMenu fab_menu;
     TextView textView, show_details_txt, attachmentTextView;
     TextInputLayout commentBox;
@@ -83,27 +120,18 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
     RecyclerView labelCommentRecyclerview;
     RecyclerView commentRecyclerView;
     Toolbar toolbar;
-    BoardCard boardCard;
+    Card boardCard;
     RecyclerView attachmentRecyclerView;
 
     private final String ACCOUNT_PREFS_NAME="prefs";
 
-    DriveClient mDriveClient;
-    GoogleSignInClient mGoogleSignInClient;
-    DriveResourceClient mDriveResourceClient;
-    Bitmap bitmapToSave;
 
-    DropboxAPI<AndroidAuthSession> mApi;
+
     ImageView coverCardImage;
     FloatingActionButton fab_menu_attachment, fab_menu_members, fab_menu_due_date, fab_menu_checklist, fab_menu_labels;
 
-    public boolean ismLoggedIn() {
-        return mLoggedIn;
-    }
 
-    public void setmLoggedIn(boolean mLoggedIn) {
-        this.mLoggedIn = mLoggedIn;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,14 +144,12 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
         fullname=preferences.getString("fullname", "0");
         userid=preferences.getString("userid", "0");
         userToken=preferences.getString("userToken", "0");
-        boardCard=new BoardCard();
+        boardCard=new Card();
         labelCommentRecyclerview =findViewById(R.id.label_recyclerview);
         coverCardImage=findViewById(R.id.card_cover_img);
         attachmentTextView=findViewById(R.id.attachment_text_view);
 
-
-        AndroidAuthSession session=buildSession();
-        mApi=new DropboxAPI<>(session);
+        requestPermission();
 
 
 
@@ -153,21 +179,32 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
         Intent prevIntent=getIntent();
         Bundle bundle=prevIntent.getExtras();
         if(bundle!=null) {
-            String cardname = bundle.getString("card_name");
-            getSupportActionBar().setTitle(cardname);
-            boardCard.setTitle(cardname);
-            boardCard.setCardId(bundle.getString("card_id"));
-            boardCard.setCardComments(bundle.getString("cardComments"));
-            boardCard.setDelStatus(bundle.getString("del_status"));
-            String cardid=boardCard.getCardId();
-
-            JSONObject jsonObject=createJsonFromCardLabelList(cardid);
+            String json=bundle.getString("json");
+            boardCard=new Gson().fromJson(json, Card.class);
+            getSupportActionBar().setTitle(boardCard.getTitle());
+            JSONObject jsonObject=createJsonFromCardLabelList(boardCard.getCardId());
             Utility.getJsonFromHttp(this, jsonObject, this,  Utility.apiUrl);
         }
-
         showComment();
-
     }
+
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+            }
+        } else {
+            // Permission has already been granted
+        }
+    }
+
 
     private void showComment() {
         try {
@@ -178,22 +215,8 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
         }
     }
 
-    //Drop Box logout
-    private void logout(){
-        mApi.getSession().unlink();
-        clearKeys();
-        setmLoggedIn(false);
-    }
 
 
-
-    //drop box preferences clear method fro logout
-    private void clearKeys() {
-        SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.clear();
-        edit.commit();
-    }
 
 
     private JSONObject createJsonForGetComment() throws JSONException {
@@ -284,7 +307,7 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
         switch (view.getId()){
             case R.id.fab_menu_attachment:
 
-                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+              AlertDialog.Builder builder=new AlertDialog.Builder(this);
                 AttachmentListModel takePhoto=new AttachmentListModel();
                 takePhoto.setAttachMentTypeName("Take Photo");
                 takePhoto.setImage_res(R.drawable.ic_camera_black_24dp);
@@ -306,6 +329,7 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
                 listModels.add(takePhoto);
                 listModels.add(otherFile);
                 listModels.add(googleDrive);
+                listModels.add(dropBoxModal);
 
                 AttachFromAdapter attachFromAdapter=new AttachFromAdapter(listModels, this);
 
@@ -318,14 +342,19 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
 
                         switch (i){
                             case 0:
+                                //Take photo
+                                startCameraForFile();
                                 break;
                             case 1:
+                                //Other file
+                                startFileChooser();
                                 break;
                             case 2:
-                                signIn();
+                                choosFileFromGoogleDrive();
                                 break;
                             case 3:
-                                dropBox();
+                                //drop box api
+
                                 break;
                         }
                     }
@@ -357,54 +386,29 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
         }
     }
 
-
-    private static final boolean USE_OAUTH1 = false;
-
-    //drop box initialiation method
-    private void dropBox() {
-
-            if(mLoggedIn){
-                logout();
-            }else {
-
-                    mApi.getSession().startOAuth2Authentication(this);
-
-            }
-
-
+    private void choosFileFromGoogleDrive() {
+        Intent intent=new Intent(this, GoogleDriveActivity.class);
+        startActivityForResult(intent, GOOGLE_DRIVE_REQUEST_CODE);
 
     }
 
-
-    //drop box build session method
-    private AndroidAuthSession buildSession(){
-        AppKeyPair appKeyPair=new AppKeyPair(getString(R.string.drop_box_app_key), getString(R.string.drop_box_app_secret));
-        AndroidAuthSession session=new AndroidAuthSession(appKeyPair);
-        loadAuth(session);
-        return session;
-    }
-
-    private static final String ACCESS_KEY_NAME = "ACCESS_KEY";
-    private static final String ACCESS_SECRET_NAME = "ACCESS_SECRET";
-
-
-    //Drop box api load auth method
-    private void loadAuth(AndroidAuthSession session) {
-        SharedPreferences preferences=getSharedPreferences(ACCOUNT_PREFS_NAME, MODE_PRIVATE);
-        String key=preferences.getString(ACCESS_KEY_NAME, null);
-        String secret=preferences.getString(ACCESS_SECRET_NAME, null);
-        if(key==null || secret==null || key.length()==0 || secret.length()==0){
-            return;
-        }
-
-        if (key.equals("oauth2:")) {
-            // If the key is set to "oauth2:", then we can assume the token is for OAuth 2.
-            session.setOAuth2AccessToken(secret);
-        } else {
-            // Still support using old OAuth 1 tokens.
-            session.setAccessTokenPair(new AccessTokenPair(key, secret));
+    private void startCameraForFile() {
+        Intent takingPhotoIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takingPhotoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takingPhotoIntent, CAMERA_REQUEST_CODE);
         }
     }
+
+    private void startFileChooser() {
+        new MaterialFilePicker()
+                .withActivity(this)
+                .withRequestCode(ATTACH_FILE_REQUEST_CODE)
+                 // Filtering files and directories by file name using regexp
+                .withFilterDirectories(true) // Set directories filterable (false by default)
+                .withHiddenFiles(true) // Show hidden files and folders
+                .start();
+    }
+
 
     @Override
     public void onFocusChange(View view, boolean b) {
@@ -480,8 +484,6 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
                         attachment.setStatus(attachments.getJSONObject(i).getString("status"));
                         if(attachment.isCoverImage())
                             GlideApp.with(this).load(attachment.getAttachmentUrl()).into(coverCardImage);
-
-
                         attachmentList.add(attachment);
                     }
                     AttachmentAdapter attachmentAdapter=new AttachmentAdapter(this, attachmentList);
@@ -491,7 +493,6 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
                     attachmentRecyclerView.setLayoutManager(manager);
                     attachmentRecyclerView.setVisibility(View.VISIBLE);
                     attachmentRecyclerView.setAdapter(attachmentAdapter);
-
     }
 
     private void createCardColorlabel(JSONArray jsonArray, View view) throws Exception {
@@ -513,7 +514,7 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
     }
 
 
-    //Volley API
+
     void createCommentRecycler(JSONArray jsonArray, RecyclerView view){
             Log.i("commentRecycler", jsonArray.toString());
             ArrayList<Comment> commentList=new ArrayList<>();
@@ -536,9 +537,8 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
             CommentAdapter commentAdapter=new CommentAdapter(commentList, this);
                 commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 commentRecyclerView.setAdapter(commentAdapter);
-
             } catch (JSONException e) {
-            e.printStackTrace();
+            Log.i("resposneData", "Comment Activity : "+e.toString());
         }
     }
 
@@ -548,56 +548,81 @@ public class CommentActivity extends BaseGoogleDriveActivity implements View.OnC
         Log.e("onSuccessListenter", error.toString());
     }
 
-
-    //Google Drive method
-
-    public void pinFile(DriveFile driveFile){
-        Task<Metadata> pinFileTask=getDriveResourceClient().getMetadata(driveFile).continueWithTask(new Continuation<Metadata, Task<Metadata>>() {
-            @Override
-            public Task<Metadata> then(@NonNull Task<Metadata> task) throws Exception {
-                Metadata metadata=task.getResult();
-                if(!metadata.isPinnable()){
-                    showMessage("Meta data is pinnable");
-                    return Tasks.forResult(metadata);
-                }
-                if(metadata.isPinned()){
-                    showMessage("Task is pinned already");
-                    return Tasks.forResult(metadata);
-                }
-
-                MetadataChangeSet changeSet=new MetadataChangeSet.Builder().setPinned(true).build();
-                return getDriveResourceClient().updateMetadata(driveFile, changeSet);
-
-            }
-        });
-
-        pinFileTask.addOnSuccessListener(new OnSuccessListener<Metadata>() {
-            @Override
-            public void onSuccess(Metadata metadata) {
-                showMessage("Meta data updated !");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Unable to update metadata", e);
-                showMessage("Update meta data failed");
-                finish();
-            }
-        });
-
-    }
-
-
-    //Google Drive method
     @Override
-    protected void onDriveClientReady() {
-            pickImageFile().addOnSuccessListener(this, new OnSuccessListener<DriveId>() {
-                @Override
-                public void onSuccess(DriveId driveId) {
-                    pinFile(driveId.asDriveFile());
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ATTACH_FILE_REQUEST_CODE:
+            switch (resultCode) {
+                case RESULT_OK:
+                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                    File file = new File(filePath);
+                    Log.i("responseData", "File Path : " + filePath);
+                    createFileUploadInRetrofit2(file);
+                    break;
+                case RESULT_CANCELED:
+                    break;
+            }
+            break;
+            case CAMERA_REQUEST_CODE:
+                if(resultCode==RESULT_OK){
+                    Bitmap bitmap=(Bitmap)data.getExtras().get("data");
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageFileName = "JPEG_" + timeStamp + "_";
+                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    try {
+                        File image = File.createTempFile(
+                                imageFileName,  /* prefix */
+                                ".jpg",         /* suffix */
+                                storageDir      /* directory */
+                        );
+                        FileOutputStream fou=new FileOutputStream(image);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fou);
+                        createFileUploadInRetrofit2(image);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            });
-
+                break;
+        }
     }
 
+
+    private void createFileUploadInRetrofit2(File file) {
+
+        String contentType= MimeTypeMap.getFileExtensionFromUrl(file.getAbsolutePath());
+        String mimeType=MimeTypeMap.getSingleton().getMimeTypeFromExtension(contentType);
+        RequestBody requestBody =RequestBody.create(MediaType.parse(mimeType), file);
+
+        MultipartBody.Part body=MultipartBody.Part.createFormData("fileToUpload", file.getName(), requestBody);
+        String description="New String !";
+        RequestBody description1=RequestBody.create(MultipartBody.FORM, description);
+
+        new Retrofit.Builder()
+                .baseUrl("http://192.168.1.4/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ProjectApi.class)
+                .upload(description1, body)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        ResponseBody responseBody=response.body();
+                        try {
+                            InputStream io=responseBody.byteStream();
+                            BufferedReader reader=new BufferedReader(new InputStreamReader(io));
+                            String line;
+                            while ((line=reader.readLine())!=null){
+                                Log.i("inputStreamReader", line);
+                            }
+                        } catch (Exception e) {
+                            Log.e("responseDataError", "CommentActivity : "+e.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("responseDataError", "Comment Activity : "+ t.toString());
+                    }
+                });
+    }
 }

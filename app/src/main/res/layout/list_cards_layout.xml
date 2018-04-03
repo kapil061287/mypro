@@ -13,12 +13,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <EditText
+      <!--  <EditText
             android:focusable="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" />-->
     
-        <com.depex.odepto.CardEditText
+        <!--<com.depex.odepto.CardEditText
             android:layout_width="match_parent"
             android:ellipsize="end"
             android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
@@ -28,7 +28,7 @@
             android:layout_marginRight="28dp"
             app:singleLineWrapText="true"
             app:isRegularTextViewWhenNotEditing="true"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" />-->
 
         <Space
             android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"

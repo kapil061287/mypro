@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.depex.odepto.screen.BoardListActivity3;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -92,8 +94,6 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
         setContentView(R.layout.nav_personal_board_activity);
         board_list=findViewById(R.id.board_list);
         preferences =getSharedPreferences("odepto_pref", MODE_PRIVATE);
-
-
 
 
 
@@ -292,6 +292,7 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
                         JSONObject jsonBoard=boardArr.getJSONObject(i);
                         Board board=new Board();
                         board.setBoardUrl(jsonBoard.getString("board_url"));
+                        board.setImageUrl(jsonBoard.getString("bg_img"));
                         board.setBoardKey(jsonBoard.getString("board_key"));
                         board.setTeamId(jsonBoard.getString("team_id"));
                         board.setBoardVisibility(jsonBoard.getString("board_visibility"));
@@ -355,7 +356,8 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
                     Bundle bundle=new Bundle();
                     bundle.putString("board_id", boardid);
                     bundle.putString("board_title", boardTitle);
-                    Intent intent=new Intent(PersonalBoardActivity.this, BoardListActivity.class);
+                    bundle.putString("bg_img", board.getImageUrl());
+                    Intent intent=new Intent(PersonalBoardActivity.this, BoardListActivity3.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
                     //Intent
@@ -386,30 +388,11 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
             Board board=list.get(position);
             String title=board.getBoardTitle();
             holder.boardTitleText.setText(title);
-
-            Animation animation=AnimationUtils.loadAnimation(PersonalBoardActivity.this, R.anim.my_sync_anim);
-            //Animation animation1=new RotateAnimation(0.0f, 90.0f);
-            holder.sync_img.setAnimation(animation);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-
+            String url=board.getImageUrl();
+            GlideApp.with(PersonalBoardActivity.this).load(url).placeholder(R.drawable.back_board).centerCrop().into(holder.boardImage);
             //animation.start();
         }
+
 
         @Override
         public int getItemCount() {
@@ -477,6 +460,4 @@ public class PersonalBoardActivity extends AppCompatActivity implements SwipeRef
         }
         return true;
     }
-
-
 }

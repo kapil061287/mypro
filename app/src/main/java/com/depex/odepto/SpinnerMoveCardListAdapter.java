@@ -8,9 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by we on 12/27/2017.
- */
+
 
 public class SpinnerMoveCardListAdapter extends BaseAdapter {
     List<BoardList> boardLists;

@@ -1,6 +1,9 @@
 package com.depex.odepto;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.View;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +24,7 @@ public class Utility {
 
     public static String deviceID;
     public static String siteUrl="https://www.odapto.com/";
+    public static String SITE_URL_RETROFIT="https://www.odapto.com/api/";
     public static final String apiUrl =siteUrl+"api/index.php";
     public static List<Board> boards=new ArrayList<>();
 
@@ -59,5 +63,19 @@ public class Utility {
             }
         });
         queue.add(request);
+    }
+
+    public static boolean isConnectvityAvailable(Context context ){
+        ConnectivityManager manager= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info= manager.getActiveNetworkInfo();
+        if(info!=null){
+            if(info.isConnected()){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
     }
 }

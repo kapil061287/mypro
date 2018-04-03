@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.depex.odepto">
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,7 +38,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".VerifyActivity"
@@ -54,24 +59,40 @@
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" />
-        <activity android:name=".BoardListActivity2"></activity>
+        <activity android:name=".BoardListActivity2" />
+        <activity android:name=".TestLayout" />
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <intent-filter>
 
-        <activity android:name=".TestLayout"/>
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-sauids7y2n12nue" />
 
-            <activity
-                android:name="com.dropbox.client2.android.AuthActivity"
-                android:launchMode="singleTask"
-                android:configChanges="orientation|keyboard">
-                <intent-filter>
-                    <!-- Change this to be db- followed by your app key -->
-                    <data android:scheme="db-sauids7y2n12nue" />
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.BROWSABLE"/>
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-            </activity>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".screen.BoardListActivity3"
+            android:label="@string/title_activity_board_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".screen.CommentActivity2"
+            android:label="@string/title_activity_comment2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".screen.GoogleDriveActivity"
+            android:label="@string/title_activity_google_drive"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
     </application>
+
 </manifest>

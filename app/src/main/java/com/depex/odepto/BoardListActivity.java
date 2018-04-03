@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -42,6 +45,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.depex.odepto.helper.CustomSnapHelper;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import org.json.JSONArray;
@@ -53,7 +57,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class BoardListActivity extends AppCompatActivity implements  OnVolleySuccessListener, OnStartDragListener, AdapterView.OnItemSelectedListener {
+public class BoardListActivity extends AppCompatActivity implements  OnVolleySuccessListener, OnStartDragListener, AdapterView.OnItemSelectedListener , GestureDetector.OnGestureListener{
 
 
     RecyclerView boardListRecycler;
@@ -64,6 +68,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
     BoardCard moveCard;
     BoardList moveCardBoardList;
     String boardTitle;
+    GestureDetector detector;
     Toolbar toolbar;
     RecyclerView.ViewHolder cardViewholder;
     boolean flagMenu=false;
@@ -80,6 +85,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
     View contextView;
     Spinner boardSpinner;
     List<BoardList> listSpinnerArrayList=new ArrayList<>();
+    Menu navigationMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +93,12 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
         setContentView(R.layout.nav_activity_board_list);
         drawerLayout=findViewById(R.id.board_list_drawer_layout);
         navigationView=findViewById(R.id.navview_board_list);
+        navigationMenu=navigationView.getMenu();
+        detector=new GestureDetector(this, this);
         preferences=getSharedPreferences("odepto_pref", MODE_PRIVATE);
         userid=preferences.getString("userid", "0");
         boardListRecycler=findViewById(R.id.board_list_recycler);
+
         fullname=preferences.getString("fullname", "0");
         userToken=preferences.getString("userToken","0");
        // Toast.makeText(this, userToken, Toast.LENGTH_LONG).show();
@@ -98,6 +107,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
         boardListAdapter = new BoardListAdapter(boardLists);
         boardListRecycler.setLayoutManager(new LinearLayoutManager(BoardListActivity.this, LinearLayout.HORIZONTAL, false));
         boardListRecycler.setAdapter(boardListAdapter);
+
         createBoardList();
     }
 
@@ -239,6 +249,38 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
 
 
     }
+//Gesture Detector method  start from here
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    //getsture detecter method end
 
 
     /**
@@ -609,6 +651,8 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
             return new BoardCardViewHolder(view);
         }
 
+
+
         @Override
         public void onBindViewHolder(final BoardCardViewHolder holder, final int position) {
                     holder.board_card_txt_title.setText(list.get(position).getTitle());
@@ -640,15 +684,20 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
                         @Override
                         public boolean onDrag(View view, DragEvent dragEvent) {
 
-                            return false;
+                            return true;
                         }
                     });
 
 
 
 
+
                     holder.itemView.setTag(list.get(position));
+                    //TODO register for context menu 19 feb 2018
                     registerForContextMenu(holder.itemView);
+
+
+
 
 
                     /*holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -667,10 +716,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
             JSONObject object=createJsonFromCardLabelList(list.get(position).getCardId());
             Log.i("onSuccessVolley", object.toString());
             Utility.getJsonFromHttp(BoardListActivity.this, object, BoardListActivity.this, Utility.apiUrl, holder.card_label_recyclerview_on_list);
-
         }
-
-
 
 
         @Override
@@ -720,6 +766,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
                 selectBoardPosition=i;
             }
         }
+
         Log.i("selectBoardPosition", ""+selectBoardPosition);
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         View view=getLayoutInflater().inflate(R.layout.move_card_alert_dialog, null, false);
@@ -845,8 +892,9 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
                             if(boardListAdapter!=null)
                             boardListAdapter.notifyDataSetChanged();
                             Log.i("boardlistAdapterNull", boardListAdapter+"");
-                            GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-                            snapHelper.attachToRecyclerView(boardListRecycler);
+                            //GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+                            CustomSnapHelper helper=new CustomSnapHelper();
+                            helper.attachToRecyclerView(boardListRecycler);
                         }
                         break;
                     case "list_card":

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="match_parent">
+<!--
+        <LinearLayout android:orientation="vertical" android:id="@+id/buttons_container" android:paddingTop="0dp" android:clipChildren="false" android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <View android:id="@+id/grey_background" android:background="@color/black_87" android:visibility="invisible" android:layout_width="match_parent" android:layout_height="UNKNOWN_DATA_0x100" />
+            <TextView android:id="@+id/members_button" android:paddingTop="8dp" android:text="@string/members" android:drawableLeft="@drawable/ic_member_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/activity_button" android:text="@string/activity" android:drawableLeft="@drawable/ic_access_time_black_24dp" style="@style/BoardSectionsItem" />
+            <View android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:id="@+id/divider1" android:background="@color/gray_300" android:layout_width="match_parent" android:layout_height="UNKNOWN_DATA_0x101" />
+            <TextView android:id="@+id/power_ups_button" android:text="@string/power_ups" android:drawableLeft="@drawable/ic_power_up_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/calendar_power_up_button" android:text="@string/calendar_power_up" android:drawableLeft="@drawable/ic_calendar_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/custom_fields_button" android:text="@string/custom_fields" android:drawableLeft="@drawable/ic_edit_20pt24box" style="@style/BoardSectionsItem" />
+            <View android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:id="@+id/divider2" android:background="@color/gray_300" android:layout_width="match_parent" android:layout_height="UNKNOWN_DATA_0x101" />
+            <TextView android:id="@+id/archived_cards_button" android:text="@string/archived_cards" android:drawableLeft="@drawable/ic_card_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/archived_lists_button" android:text="@string/archived_lists" android:drawableLeft="@drawable/ic_view_week_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/settings_button" android:clickable="false" android:text="@string/board_settings" android:drawableLeft="@drawable/ic_gear_20pt24box" style="@style/BoardSectionsItem" />
+            <View android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:id="@+id/divider3" android:background="@color/gray_300" android:layout_width="match_parent" android:layout_height="UNKNOWN_DATA_0x101" />
+            <TextView android:id="@+id/star" android:text="@string/star_board" android:drawableLeft="@drawable/ic_star_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/subscribe" android:text="@string/subscribe" android:drawableLeft="@drawable/ic_subscribe_20pt24box" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/copy" android:visibility="gone" android:text="@string/copy_board" android:drawableLeft="@drawable/ic_content_copy_grey600_24dp" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/share" android:text="@string/share_board" android:drawableLeft="@drawable/abc_ic_menu_share_mtrl_alpha" style="@style/BoardSectionsItem" />
+            <TextView android:id="@+id/join" android:text="@string/leave_board_cap" android:drawableLeft="@drawable/ic_leave_board_20pt24box" style="@style/BoardSectionsItem" />
+            <include android:id="@+id/bottom_shadow" android:layout_width="match_parent" android:layout_height="UNKNOWN_DATA_0x1401" layout="@layout/shadow_view" />
+            <com.trello.feature.common.view.DividerView android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:id="@+id/top_shadow" android:visibility="gone" android:layout_width="match_parent" android:layout_height="UNKNOWN_DATA_0x101" />
+            <FrameLayout android:id="@+id/bottom_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
+                <LinearLayout android:gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:orientation="horizontal" android:id="@+id/last_synced_indicator_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:layout_marginBottom="16dp">
+                    <com.trello.feature.sync.SyncIndicatorView android:id="@+id/sync_indicator" android:layout_width="UNKNOWN_DATA_0x1801" android:layout_height="UNKNOWN_DATA_0x1801" android:layout_marginLeft="16dp" android:layout_marginRight="16dp" android:isDark="true" />
+                    <com.trello.feature.common.view.TimeTickTextView android:textSize="14sp" android:textColor="@color/gray" android:id="@+id/last_synced_text" android:paddingLeft="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>-->
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+</FrameLayout>

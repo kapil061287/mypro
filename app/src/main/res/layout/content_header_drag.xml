@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:orientation="vertical"
+    android:layout_marginTop="20dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/back_img_header"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/title_activity_board_list"
+        android:id="@+id/header_list_text"
+        android:layout_width="300dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18dp"
+        android:textColor="#ffffffff"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_height="40dp" />
+
+</FrameLayout>

@@ -5,7 +5,7 @@
     <dimen name="avatar">40dp</dimen>
     <dimen name="attachment_image_dimen">120dp</dimen>
     <dimen name="horizontal_scroll_region">90dp</dimen>
-    <dimen name="list_width">280dp</dimen>
+    <dimen name="list_width">250dp</dimen>
     <dimen name="card_list_minimum_height">51dp</dimen>
     <dimen name="card_list_card_spacing">2dp</dimen>
     <dimen name="list_view_scroll_region">40dp</dimen>
