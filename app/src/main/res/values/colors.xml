@@ -21,4 +21,6 @@
     <color name="label_sky">#00c1e3</color>
     <color name="label_yellow">#f7ef00</color>
     <color name="black_87">#ffaaaaaa</color>
+    <color name="divider_color">#FF777777</color>
+    <color name="nav_menu_text_color">#FF000000</color>
 </resources>

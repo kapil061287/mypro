@@ -20,4 +20,6 @@
     <dimen name="attachment_from_margin">20dp</dimen>
     <dimen name="margin_left_input">20dp</dimen>
     <dimen name="margin_right_input">20dp</dimen>
+    <dimen name="padding_menu_text">10dp</dimen>
+    <dimen name="divider_height_nav_menu">0.5dp</dimen>
 </resources>

@@ -210,7 +210,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                                 labelCommentRecyclerview.setAdapter(adapter);
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e("responseData","Comment Activity Error :"+ e.toString());
                         }
 
                     }
@@ -225,7 +225,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 });
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("responseDataError", "Comment Error : "+e.toString());
         }
     }
 

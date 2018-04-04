@@ -81,6 +81,7 @@ public class BoardListActivity3 extends AppCompatActivity implements BoardView.B
 
     private Menu menu;
 
+    View navView;
     @BindView(R.id.root_view)
     CoordinatorLayout rootView;
 
@@ -114,6 +115,8 @@ public class BoardListActivity3 extends AppCompatActivity implements BoardView.B
         Bundle bundle=getIntent().getExtras();
         boardid=bundle.getString("board_id");
         navigationView.setNavigationItemSelectedListener(this);
+        navView=LayoutInflater.from(this).inflate(R.layout.right_drawer_menu, navigationView, false);
+        navigationView.addView(navView);
         boardTitle=bundle.getString("board_title");
         String imgUrl=bundle.getString("bg_img");
 

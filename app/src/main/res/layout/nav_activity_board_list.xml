@@ -17,7 +17,7 @@
         android:fitsSystemWindows="true"
         android:id="@+id/navview_board_list"
         android:layout_gravity="right"
-        app:menu="@menu/nav_menu_list_card"
+
         android:layout_height="match_parent">
 
     </android.support.design.widget.NavigationView>
