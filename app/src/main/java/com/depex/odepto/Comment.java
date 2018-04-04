@@ -1,18 +1,35 @@
 package com.depex.odepto;
 
-/**
- * Created by we on 1/2/2018.
- */
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Comparator;
+import java.util.Date;
 
 public class Comment {
 
 
+    @SerializedName("userid")
     private String usreid;
+    @SerializedName("comments")
     private String comment;
+    @SerializedName("username")
     private String userName;
+    @SerializedName("card_id")
     private String cardId;
+    @SerializedName("ckey")
     private String ckey;
+    @SerializedName("date_time")
+    private Date time;
 
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 
     public String getUsreid() {
         return usreid;
@@ -55,27 +72,10 @@ public class Comment {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Comment comment1 = (Comment) o;
-
-        if (getUsreid() != null ? !getUsreid().equals(comment1.getUsreid()) : comment1.getUsreid() != null)
-            return false;
-        if (getComment() != null ? !getComment().equals(comment1.getComment()) : comment1.getComment() != null)
-            return false;
-        if (getUserName() != null ? !getUserName().equals(comment1.getUserName()) : comment1.getUserName() != null)
-            return false;
-        if (getCardId() != null ? !getCardId().equals(comment1.getCardId()) : comment1.getCardId() != null)
-            return false;
-        return getCkey() != null ? getCkey().equals(comment1.getCkey()) : comment1.getCkey() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getComment().length()+getCardId().length()+getCkey().length()+getUserName().length()+getUsreid().length();
-        return result;
+    public static class CommentComparator implements Comparator<Comment>{
+        @Override
+        public int compare(Comment comment, Comment t1) {
+            return -1*(comment.getTime().compareTo(t1.getTime()));
+        }
     }
 }

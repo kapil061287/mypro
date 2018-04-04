@@ -942,7 +942,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
                     case "card_label_list":
                         JSONArray jsonArray=responseData.getJSONArray("AllCardComment");
                         if(objects[0] instanceof RecyclerView) {
-                            createCardColorlabel(jsonArray,(RecyclerView)objects[0]);
+                            //createCardColorlabel(jsonArray,(RecyclerView)objects[0]);
                         }
                         break;
 
@@ -983,7 +983,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
     }
 
 
-    private void createCardColorlabel(JSONArray jsonArray, View view) throws JSONException {
+    /*private void createCardColorlabel(JSONArray jsonArray, View view) throws JSONException {
         List<CardLabelButton> buttons=new ArrayList<>();
         for(int i=0;i<jsonArray.length();i++){
             JSONObject object=jsonArray.getJSONObject(i);
@@ -1002,7 +1002,7 @@ public class BoardListActivity extends AppCompatActivity implements  OnVolleySuc
         recyclerView.setLayoutManager(manager);
 
     }
-
+*/
 
 
     @Override

@@ -1,16 +1,33 @@
 package com.depex.odepto;
 
 
+import com.google.gson.annotations.SerializedName;
 
 public class Label {
 
+    @SerializedName("labels")
     private  String color;
+    @SerializedName("name")
     private String name;
+    @SerializedName("id")
     private String id;
+    @SerializedName("cardid")
     private String cardId;
+    @SerializedName("userid")
+    private String userid;
+    @SerializedName("status")
     private String status;
+    @SerializedName("ckey")
     private String ckey;
 
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public String getName() {
         return name;
@@ -68,26 +85,24 @@ public class Label {
 
         Label label = (Label) o;
 
-        if (getColor() != null ? !getColor().equals(label.getColor()) : label.getColor() != null)
-            return false;
-        if (getName() != null ? !getName().equals(label.getName()) : label.getName() != null)
-            return false;
-        if (getId() != null ? !getId().equals(label.getId()) : label.getId() != null) return false;
-        if (getCardId() != null ? !getCardId().equals(label.getCardId()) : label.getCardId() != null)
-            return false;
-        if (getStatus() != null ? !getStatus().equals(label.getStatus()) : label.getStatus() != null)
-            return false;
-        return getCkey() != null ? getCkey().equals(label.getCkey()) : label.getCkey() == null;
+        if (color != null ? !color.equals(label.color) : label.color != null) return false;
+        if (name != null ? !name.equals(label.name) : label.name != null) return false;
+        if (id != null ? !id.equals(label.id) : label.id != null) return false;
+        if (cardId != null ? !cardId.equals(label.cardId) : label.cardId != null) return false;
+        if (userid != null ? !userid.equals(label.userid) : label.userid != null) return false;
+        if (status != null ? !status.equals(label.status) : label.status != null) return false;
+        return ckey != null ? ckey.equals(label.ckey) : label.ckey == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getColor() != null ? getColor().hashCode() : 0;
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getCardId() != null ? getCardId().hashCode() : 0);
-        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
-        result = 31 * result + (getCkey() != null ? getCkey().hashCode() : 0);
+        int result = color != null ? color.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (cardId != null ? cardId.hashCode() : 0);
+        result = 31 * result + (userid != null ? userid.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (ckey != null ? ckey.hashCode() : 0);
         return result;
     }
 }

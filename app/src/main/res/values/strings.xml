@@ -49,4 +49,6 @@
     <string name="activity">Activities</string>
     <string name="title_activity_comment2">CommentActivity2</string>
     <string name="title_activity_google_drive">GoogleDriveActivity</string>
+    <string name="title_activity_dropbox_api">DropboxApiActivity</string>
+    <string name="title_activity_evernote">EvernoteActivity</string>
 </resources>

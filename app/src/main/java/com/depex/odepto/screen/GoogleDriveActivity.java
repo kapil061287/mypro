@@ -112,7 +112,7 @@ public class GoogleDriveActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             mMetadata=task.getResult();
                             String webLink=mMetadata.getAlternateLink();
-
+                            finishThisActivity(webLink);
                             Log.i(TAG, webLink+"");
 
 
@@ -131,6 +131,15 @@ public class GoogleDriveActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void finishThisActivity(String webLink) {
+        Bundle bundle=new Bundle();
+        bundle.putString("webLink", webLink);
+        Intent intent=new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void downloadFileFromDrive() {

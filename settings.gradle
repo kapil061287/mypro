@@ -1,1 +1,2 @@
 include ':app', ':linkedin-sdk'
+include ':dropboxChooserSDK'

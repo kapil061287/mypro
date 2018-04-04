@@ -8,8 +8,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -87,12 +85,22 @@
         <activity
             android:name=".screen.GoogleDriveActivity"
             android:label="@string/title_activity_google_drive"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity
+            android:name=".screen.DropboxApiActivity"
+            android:label="@string/title_activity_dropbox_api"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.evernote.client.android.EvernoteOAuthActivity" />
+        <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity" />
+        <activity
+            android:name=".screen.EvernoteActivity"
+            android:label="@string/title_activity_evernote"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

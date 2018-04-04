@@ -28,4 +28,13 @@ public interface ProjectApi {
     @Multipart
     @POST("file_upload.php")
     Call<ResponseBody> upload(@Part("description")RequestBody description, @Part MultipartBody.Part file);
+
+    @POST("index.php")
+    Call<String> createComment(@Body String body);
+
+    @POST("index.php")
+    Call<String> cardComments(@Body String body);
+
+    @POST("index.php")
+    Call<String> cardLabel(@Body String body);
 }

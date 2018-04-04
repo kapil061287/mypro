@@ -16,10 +16,10 @@ import java.util.List;
 
 
 public class CardLabelViewAdapter extends RecyclerView.Adapter<CardLabelViewAdapter.CardLabelViewholder>{
-    List<CardLabelButton> labelButtons;
+    List<Label> labelButtons;
     Activity activity;
 
-    public CardLabelViewAdapter(List<CardLabelButton> labelButtons, Activity activity ){
+    public CardLabelViewAdapter(List<Label> labelButtons, Activity activity ){
         this.labelButtons=labelButtons;
         this.activity=activity;
 
@@ -33,7 +33,7 @@ public class CardLabelViewAdapter extends RecyclerView.Adapter<CardLabelViewAdap
 
     @Override
     public void onBindViewHolder(final CardLabelViewholder holder, int position) {
-        CardLabelButton cardLabelButton=labelButtons.get(position);
+        Label cardLabelButton=labelButtons.get(position);
         GradientDrawable drawable=(GradientDrawable) holder.card_label_color_button.getBackground();
         drawable.setColor(Color.parseColor(cardLabelButton.getColor()));
         //holder.card_label_color_button.setBackgroundColor(Color.parseColor(cardLabelButton.getColor()));
